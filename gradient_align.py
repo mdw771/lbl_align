@@ -42,9 +42,6 @@ def align_gradient(img, search_range=(-10, 10, 0.5)):
     return dat
 
 
-
-
-
 if __name__ == '__main__':
 
     img = dxchange.read_tiff('data/scan154_HDPC.tif')

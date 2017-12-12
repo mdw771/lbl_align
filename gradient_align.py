@@ -1,10 +1,11 @@
+import os
 import dxchange
 import numpy as np
 from util import *
 
 
 
-def align_gradient(img, search_range=(-10, 10, 0.5)):
+def align_gradient(img, search_range=(-10, 10, 0.5), write_shifts=True, save_path='.'):
     """
     Align images line-by-line using gradient minimization.
     :param img: np.ndarray
@@ -14,6 +15,9 @@ def align_gradient(img, search_range=(-10, 10, 0.5)):
     :return: np.ndarray
              Aligned image.
     """
+
+    if write_shifts:
+        f = open(os.path.join(save_path, 'shifts.txt'), 'w')
 
     accum = 0
     dat = np.copy(img)
@@ -37,8 +41,12 @@ def align_gradient(img, search_range=(-10, 10, 0.5)):
                 grad /= edge_r - edge_l
                 grad_ls.append(grad)
             shift = offset_ls[np.argmin(grad_ls)]
+            if write_shifts:
+                f.write('{} {}\n'.format(i, accum + shift))
             accum += shift
             dat[i] = realign_image_1d(this_line, shift)
+
+
     return dat
 
 
